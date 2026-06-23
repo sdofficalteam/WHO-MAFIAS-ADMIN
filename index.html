@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATEWAY | WHO-MAFIAS COMMAND & CONTROL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+              background-color: #000;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+            /* Scroll enable kar diya gaya hai */
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .glitch-text {
+            text-shadow: 2px 2px #ff0000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        input {
+            background: rgba(20, 20, 20, 0.9) !important;
+            border: 1px solid #333 !important;
+            color: #00ff00 !important;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff0000 !important;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            outline: none;
+        }
+
+        .btn-access {
+            background: #ff0000;
+            color: white;
+            font-weight: 800;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        .btn-access:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px #ff0000;
+            transform: scale(1.02);
+        }
+
+        .server-status {
+            font-size: 10px;
+            color: #444;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- MATRIX BACKGROUND -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- CONTENT -->
+    <div class="main-container w-full max-w-5xl rounded-3xl overflow-hidden animate-in fade-in duration-1000">
+        
+        <!-- HEADER -->
+        <div class="bg-red-900/20 p-6 border-b border-red-600 text-center">
+            <h1 class="text-2xl md:text-4xl font-black italic tracking-tighter text-white glitch-text">
+                WHO MAFIAS <span class="text-red-600">COMMAND & CONTROL</span>
+            </h1>
+            <p class="text-[10px] md:text-xs mt-2 text-gray-400 tracking-[5px] uppercase">Encrypted Neural Network Access Point</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-red-900/50">
+            
+            <!-- FORM 1: OPERATIVE LOGIN -->
+            <div class="p-8 space-y-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fa-solid fa-user-secret text-2xl text-red-600"></i>
+                    <h2 class="text-lg font-bold uppercase italic text-white">Operative_Login</h2>
+                </div>
+                
+                <form id="operativeForm" class="space-y-4">
+                    <div>
+                        <label class="text-[10px] uppercase text-gray-500 font-bold block mb-1">Transmission ID (Email)</label>
+                        <input type="email" id="opEmail" required placeholder="name@whomafias.com" class="w-full p-3 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase text-gray-500 font-bold block mb-1">Encryption Key (Password)</label>
+                        <input type="password" id="opPass" required placeholder="••••••••••••" class="w-full p-3 rounded-lg text-sm">
+                    </div>
+                    <button type="submit" id="opBtn" class="w-full btn-access py-4 rounded-lg mt-4">Initialize Session</button>
+                </form>
+            </div>
+
+            <!-- FORM 2: ADMIN BYPASS -->
+            <div class="p-8 space-y-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fa-solid fa-shield-halved text-2xl text-red-600"></i>
+                    <h2 class="text-lg font-bold uppercase italic text-white">Admin_Bypass</h2>
+                </div>
+                
+                <form id="adminForm" class="space-y-4">
+                    <div>
+                        <label class="text-[10px] uppercase text-gray-500 font-bold block mb-1">Master Admin ID</label>
+                        <input type="text" id="adminIdInput" required placeholder="ENTER ADMIN ID" class="w-full p-3 rounded-lg text-sm uppercase tracking-widest">
+                    </div>
+                    <div class="p-4 bg-red-600/5 rounded-lg border border-red-600/20">
+                        <p class="text-[9px] text-gray-500 leading-relaxed italic">
+                            NOTICE: All Admin bypass attempts are logged. Unauthorized access will trigger a network-wide lockdown. Verification is required via 'AdminID' database.
+                        </p>
+                    </div>
+                    <button type="submit" id="adminBtn" class="w-full btn-access py-4 rounded-lg mt-4 bg-white !text-black hover:bg-gray-200">Verify Clearance</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- FOOTER: SERVER LOGS -->
+        <div class="bg-black p-4 border-t border-red-900/50">
+            <div id="serverLogs" class="server-status font-mono italic">
+                [SYSTEM] INITIALIZING BOOT SEQUENCE... OK | CONNECTING TO NODES... OK | ENCRYPTING DATA... OK | STATUS: STANDBY
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaDGO79lLHo6U7WKpEv2z4i5kmjr3Tm7rKm2x8Nv0dQtTTiiGwkeSHaLRBctqQwKs/exec"; // PASTE YOUR SCRIPT URL
+
+        // 1. MATRIX ANIMATION
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#300"; // Dark red for hacking vibe
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 35);
+
+        // 2. SERVER LOGS ANIMATION
+        const logs = [
+            "SCANNING NODES...",
+            "ENCRYPTING TRAFFIC...",
+            "BYPASSING FIREWALLS...",
+            "CONNECTION ESTABLISHED",
+            "AWAITING AUTHENTICATION",
+            "SERVER_01: ONLINE",
+            "PROXY_GHOST: ACTIVE"
+        ];
+        setInterval(() => {
+            const logEl = document.getElementById('serverLogs');
+            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+            logEl.innerText = `[LOG] ${new Date().toLocaleTimeString()} - ${randomLog} | STATUS: READY`;
+        }, 2000);
+
+        // 3. OPERATIVE LOGIN (FORM 1)
+        document.getElementById('operativeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('opEmail').value;
+            const pass = document.getElementById('opPass').value;
+            const btn = document.getElementById('opBtn');
+
+            if(email === "Dark@WhoMafias.com" && pass === "OneGhostOneVectorOneHitMan") {
+                btn.innerText = "ACCESS GRANTED";
+                localStorage.setItem('mafia_auth', 'operative');
+                setTimeout(() => { window.location.href = "command.html"; }, 1000);
+            } else {
+                alert("ACCESS DENIED: INVALID ENCRYPTION KEYS.");
+                btn.innerText = "FAILED";
+                setTimeout(() => { btn.innerText = "Initialize Session"; }, 2000);
+            }
+        });
+
+        // 4. ADMIN BYPASS (FORM 2)
+        document.getElementById('adminForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const adminId = document.getElementById('adminIdInput').value;
+            const btn = document.getElementById('adminBtn');
+
+            btn.innerText = "VERIFYING...";
+            btn.disabled = true;
+
+            try {
+                // Apps Script will check if 'adminId' exists in 'AdminID' tab
+                const response = await fetch(`${SCRIPT_URL}?action=verifyAdmin&adminId=${adminId}`);
+                const data = await response.json();
+
+                if(data.success) {
+                    btn.innerText = "CLEARANCE CONFIRMED";
+                    localStorage.setItem('mafia_auth', 'admin');
+                    setTimeout(() => { window.location.href = "AdminPane.html"; }, 1000);
+                } else {
+                    alert("ID REJECTED: NO ADMIN CLEARANCE FOUND.");
+                    btn.innerText = "ID REJECTED";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert("NETWORK ERROR: SERVER UNREACHABLE.");
+                btn.innerText = "Verify Clearance";
+                btn.disabled = false;
+            }
+        });
+    </script>
+    <!-- Footer ke neeche aur </body> se pehle ye code paste karein -->
+<script>
+    // 1. Disable Right Click (Lekin text selection aur copy allow rahega)
+    document.addEventListener('contextmenu', function(e) {
+        // Agar user text select karke right click karega tab bhi block hoga, 
+        // Isliye text copy karne ke liye unhe Ctrl+C use karna hoga.
+        e.preventDefault();
+    }, false);
+
+    // 2. DevTools Block Karne ke Shortcuts
+    document.onkeydown = function(e) {
+        // F12 key block
+        if (event.keyCode == 123) {
+            return false;
+        }
+        // Ctrl+Shift+I (Inspect Element)
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+            return false;
+        }
+        // Ctrl+Shift+C (Inspect Element shortcut)
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+            return false;
+        }
+        // Ctrl+Shift+J (Console)
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+            return false;
+        }
+        // Ctrl+U (View Source Code)
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+            return false;
+        }
+    };
+
+    // 3. DevTools Detection (Optional: Console open hote hi page khali ho jayega)
+    // Note: Isse developer mode pakda jata hai.
+    setInterval(function() {
+        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+            // Agar console side mein open ho
+            console.clear();
+        }
+    }, 500);
+
+    // 4. Image Dragging Allow (By default HTML allow karta hai, 
+    // lekin hum ensure kar rahe hain ki koi script ise roke na)
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', function(event) {
+            // Dragging allow hai
+        });
+    });
+</script>
+</body>
+</html>

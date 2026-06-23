@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHO MAFIAS | INTELLIGENCE HUB</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #f4f7f9;
+            --card-white: #ffffff;
+            --accent-red: #e11d48;
+            --accent-gold: #b89130;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Cyber Loader --- */
+        #global-loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .loader-spin {
+            width: 50px; height: 50px;
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--accent-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Recent Intel Badge Style */
+.recent-badge {
+    background: #10b981 !important; /* Green */
+    color: white !important;
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 10px;
+    font-family: 'Orbitron';
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.priority-card {
+    border-left: 4px solid #10b981 !important;
+    background: #f0fff4 !important; /* Light green tint for white background */
+}
+
+.refresh-btn {
+    cursor: pointer;
+    background: #0a0a0a !important;
+    border: 1px solid var(--accent-red) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #fff;
+}
+
+.refresh-btn i {
+    color: var(--accent-red);
+    transition: 0.3s;
+}
+
+.refresh-btn:hover {
+    background: var(--accent-red) !important;
+    box-shadow: 0 0 20px rgba(225, 29, 72, 0.5);
+    transform: translateY(-2px);
+}
+
+.refresh-btn:hover i {
+    color: #fff !important;
+}
+
+/* Radar/Sync Spinning Animation */
+.radar-spin {
+    animation: radarRotate 1s linear infinite;
+}
+
+@keyframes radarRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+        /* --- Header Section --- */
+        header {
+            background: #fff;
+            border-bottom: 2px solid var(--text-dark);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .agency-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .agency-logo i {
+            font-size: 2rem;
+            color: var(--accent-red);
+        }
+
+        .agency-logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .intel-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-badge {
+            background: #000;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .stat-badge span { color: var(--accent-gold); font-weight: bold; }
+
+        /* --- Content Layout --- */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .feed-header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feed-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feed-header h2::before {
+            content: '';
+            width: 10px;
+            height: 25px;
+            background: var(--accent-red);
+            display: inline-block;
+        }
+
+        /* --- Comment Card Design --- */
+        .comment-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .comment-card {
+            background: var(--card-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            position: relative;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+
+        .comment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            border-color: var(--accent-red);
+        }
+
+        /* Rank/Initial Circle */
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: #000;
+            color: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .comment-body {
+            flex-grow: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .user-info h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .user-email {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-red);
+            background: rgba(225, 29, 72, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .message-content {
+            font-size: 0.95rem;
+            color: #334155;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--border-color);
+            font-style: italic;
+            position: relative;
+        }
+
+        .message-content::before {
+            content: '"';
+            font-size: 2rem;
+            color: var(--border-color);
+            position: absolute;
+            top: -5px;
+            left: 5px;
+            font-family: serif;
+        }
+
+        .metadata {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .status-tag {
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: #fff;
+            background: #000;
+            padding: 3px 10px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .time-stamp {
+            margin-top: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            display: block;
+        }
+
+        .delete-area {
+    margin-top: 15px;
+    border-top: 1px dashed #333;
+    padding-top: 10px;
+}
+
+.delete-btn {
+    color: #666;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.delete-btn:hover {
+    color: var(--accent-red);
+    text-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
+}
+
+.deleting-spinner {
+    animation: radarRotate 1s linear infinite;
+}
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .comment-card { flex-direction: column; }
+            .comment-header { flex-direction: column; }
+            .metadata { text-align: left; margin-top: 15px; }
+            header { flex-direction: column; gap: 15px; }
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="global-loader">
+        <div class="loader-spin"></div>
+        <p style="margin-top: 15px; font-family: 'Orbitron'; font-size: 0.7rem; letter-spacing: 2px;">DECRYPTING INTEL FEED...</p>
+    </div>
+
+    <header>
+        <div class="agency-logo">
+            <i class="fas fa-shield-halved"></i>
+            <h1>WHO MAFIAS <span style="color: var(--accent-red);">Command & Control</span></h1>
+        </div>
+           <div class="intel-stats">
+            <!-- REFRESH BUTTON (NEW) -->
+            <button class="stat-badge refresh-btn" onclick="triggerManualSync()" title="Force Database Sync">
+                <i class="fas fa-satellite-dish" id="sync-icon"></i> REFRESH FEED
+            </button>
+        <div class="intel-stats">
+            <div class="stat-badge">
+                FEED STATUS: <span id="sync-status">STABLE</span>
+            </div>
+            <div class="stat-badge">
+                TOTAL INTEL: <span id="total-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="feed-header">
+            <h2><span style="color: var(--accent-red);">Check</span> Comments</h2>
+            <div style="font-family: 'Roboto Mono'; font-size: 0.8rem; color: var(--text-gray);">
+                <i class="fas fa-circle" style="color: #10b981; font-size: 8px;"></i> LIVE DATABASE SYNC
+            </div>
+        </div>
+
+        <div id="comment-container" class="comment-grid">
+            <!-- Comments will be injected here -->
+        </div>
+    </div>
+
+    <footer>
+        &copy; WHO MAFIAS NETWORK | SECURE ACCESS TERMINAL v4.0.1
+    </footer>
+
+    <script>
+        // --- CONFIGURATION ---
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTUDvhE1p1VHenNi8IRERZlWzmNKA5efTytDJAx8ghs6I8tR_kLJPAjf2c4j1z76mbyg/exec'; // Replace with your actual script URL
+
+        async function fetchComments() {
+            const container = document.getElementById('comment-container');
+            const loader = document.getElementById('global-loader');
+            const totalCountEl = document.getElementById('total-count');
+
+            try {
+                // Fetching from your Google Apps Script
+                const response = await fetch(APPS_SCRIPT_URL + "?action=getComments");
+                const data = await response.json();
+
+                // Hide Loader
+                loader.style.display = 'none';
+
+                if (data.status === "success") {
+                    const comments = data.comments;
+                    const now = new Date();
+                    const sevenDaysAgo = new Date(); sevenDaysAgo.setDate(now.getDate() - 7);
+                    totalCountEl.innerText = comments.length;
+
+                    let recentComments = [];
+let olderComments = [];
+
+comments.forEach(c => {
+    // Note: Ensure your Date column in Sheet is in a valid format (e.g., YYYY-MM-DD or MM/DD/YYYY)
+    const commentDate = new Date(c.Date || c.date);
+    
+    if (commentDate >= sevenDaysAgo) {
+        c.isRecent = true; // Mark as recent
+        recentComments.push(c);
+    } else {
+        c.isRecent = false;
+        olderComments.push(c);
+    }
+});
+
+// Sorting: Recent waale pehle, phir baaki (Donon groups ke andar newest first)
+recentComments.sort((a, b) => new Date(b.Date || b.date) - new Date(a.Date || a.date));
+olderComments.sort((a, b) => new Date(b.Date || b.date) - new Date(a.Date || a.date));
+
+// Donon ko milana: Recent Top par aayenge
+const sortedComments = [...recentComments, ...olderComments];
+                    
+                    container.innerHTML = ''; // Clear container
+
+                    sortedComments.forEach((c, index) => {
+    const rawName = c.Name || c.name || "Unknown Agent";
+    const rawEmail = c.Email || c.email || "N/A";
+    const rawMessage = c.Message || c.message || c["Message "] || "No content";
+    const rawDate = c.Date || c.date || "";
+    const initial = rawName.charAt(0).toUpperCase();
+
+    // Check if recent to apply different style
+    const cardClass = c.isRecent ? "comment-card priority-card" : "comment-card";
+    const badgeHtml = c.isRecent ? `<span class="recent-badge"><i class="fas fa-bolt"></i> RECENT INTEL</span>` : "";
+
+    const card = `
+        <div class="${cardClass}" style="animation: slideIn 0.5s ease forwards; animation-delay: ${index * 0.1}s;">
+            <div class="user-avatar">${initial}</div>
+            <div class="comment-body">
+                <div class="comment-header">
+                    <div class="user-info">
+                        <h4>${rawName} ${badgeHtml}</h4>
+                        <span class="user-email">${rawEmail}</span>
+                    </div>
+                    <div class="metadata">
+                        <span class="status-tag">${c.isRecent ? "PRIORITY" : "ARCHIVED"}</span>
+                        <span class="time-stamp"><i class="far fa-clock"></i> ${rawDate}</span>
+
+                        <div class="delete-area">
+                        <span class="delete-btn" onclick="deleteIntel(this, '${rawName}', '${rawMessage.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-trash-alt"></i> ERASE RECORD
+                        </span>
+                    </div>
+                    </div>
+                </div>
+                <div class="message-content">
+                    ${rawMessage}
+                </div>
+            </div>
+        </div>
+    `;
+    container.innerHTML += card;
+});
+                      
+                }
+            } catch (err) {
+                console.error("Critical Error:", err);
+                loader.innerHTML = `<p style="color:red; font-family:'Orbitron'">ACCESS DENIED: DATABASE OFFLINE</p>`;
+            }
+        }
+
+
+        
+        // Add slide-in animation via JS inject
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateX(-20px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        window.onload = fetchComments;
+
+
+        // Manual Refresh with Visual Feedback
+async function triggerManualSync() {
+    const icon = document.getElementById('sync-icon');
+    const statusText = document.getElementById('sync-status');
+
+    // 1. Animation start karein
+    icon.classList.add('radar-spin');
+    statusText.innerText = "SYNCING...";
+    statusText.style.color = "#e11d48"; // Red warning color
+
+    // 2. Data fetch karein
+    await fetchComments();
+
+    // 3. Animation stop karein (data aane ke baad)
+    setTimeout(() => {
+        icon.classList.remove('radar-spin');
+        statusText.innerText = "STABLE";
+        statusText.style.color = "var(--accent-gold)";
+    }, 600);
+}
+
+
+async function deleteIntel(btn, name, message) {
+    // 1. Confirm karein (Security check)
+    if (!confirm("CRITICAL: Are you sure you want to PERMANENTLY ERASE this record from the central database?")) {
+        return;
+    }
+
+    // 2. Visual Feedback (Loading start)
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = `<i class="fas fa-sync-alt deleting-spinner"></i> ERASING...`;
+    btn.style.pointerEvents = "none";
+
+    try {
+        // 3. API Call to Google Script
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=deleteComment&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+            // 4. Card ko UI se remove karein
+            const card = btn.closest('.comment-card');
+            card.style.opacity = "0.3";
+            card.style.transform = "translateX(50px)";
+            setTimeout(() => {
+                card.remove();
+                // Update total count
+                const countEl = document.getElementById('total-count');
+                countEl.innerText = parseInt(countEl.innerText) - 1;
+            }, 500);
+        } else {
+            alert("ERROR: Record not found or already erased.");
+            btn.innerHTML = originalContent;
+            btn.style.pointerEvents = "auto";
+        }
+    } catch (err) {
+        console.error("Delete failed", err);
+        alert("CRITICAL ERROR: Connection to Database Terminated.");
+        btn.innerHTML = originalContent;
+        btn.style.pointerEvents = "auto";
+    }
+}
+    </script>
+</body>
+</html>
